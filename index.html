@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MLBB</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .results {
+        margin-top: 20px;
+      }
+      .result-item {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Diamond Price</h1>
+    <label for="userInput">Enter a number:</label>
+    <input type="number" id="userInput" name="userInput" />
+    <button onclick="multiplyValues()">Calculate</button>
+
+    <div class="results" id="results">
+      <h2>Diamond prices:</h2>
+      <div id="wpResults"></div>
+    </div>
+
+    <script>
+      // Function to multiply each value in the list by the user input
+      function multiplyValues() {
+        const userInput = parseFloat(
+          document.getElementById("userInput").value
+        );
+        if (isNaN(userInput)) {
+          alert("Please enter a valid number.");
+          return;
+        }
+
+        const wpValues = [
+          { wp: 76 },
+          { twilight: 76, multiplier: 402.5 },
+          { dia: 86, multiplier: 61.5 },
+          { dia: 172, multiplier: 122 },
+          { dia: 257, multiplier: 177.5 },
+          { dia: 343, multiplier: 239 }, // 343 = 257 + 86
+          { dia: 429, multiplier: 299.5 }, // 429 = 257 + 172
+          { dia: 514, multiplier: 355 }, // 514 = 257 + 257
+          { dia: 600, multiplier: 416.5 }, // 600 = 257 + 257 + 86
+          { dia: 706, multiplier: 480 },
+          { dia: 878, multiplier: 602 }, // 878 = 706 + 172
+          { dia: 1050, multiplier: 724 }, // 1050 = 706 + 172 + 172
+          { dia: 2195, multiplier: 1453 },
+          { dia: 3688, multiplier: 2424 },
+          { dia: 5532, multiplier: 3660 },
+          { dia: 9288, multiplier: 6079 },
+        ];
+
+        // Multiply each value by the user input
+        const wpResults = wpValues.map((item, index) => {
+          if (index === 0) {
+            return { wp: item.wp * userInput };
+          } else if (item.twilight) {
+            return {
+              twilight: item.twilight,
+              multiplier: item.multiplier * userInput,
+            };
+          } else {
+            return {
+              dia: item.dia,
+              multiplier: item.multiplier * userInput,
+            };
+          }
+        });
+
+        // Display the results
+        const wpResultsDiv = document.getElementById("wpResults");
+        wpResultsDiv.innerHTML = "";
+
+        wpResults.forEach((item, index) => {
+          const resultItem = document.createElement("div");
+          resultItem.className = "result-item";
+          if (item.wp !== undefined) {
+            resultItem.textContent = `Wp - ${item.wp}`;
+          } else if (item.twilight !== undefined) {
+            resultItem.textContent = `Twilight - ${item.multiplier}`;
+          } else {
+            resultItem.textContent = `💎${item.dia} - ${item.multiplier}`;
+          }
+          wpResultsDiv.appendChild(resultItem);
+        });
+      }
+    </script>
+  </body>
+</html>
